@@ -3,28 +3,28 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
 const App = () => {
-  const [position, setPosition] = useState([19.0760, 72.8777]); // Default position (Mumbai)
+  const [position, setPosition] = useState([19.0760, 72.8777]); 
   const [locationName, setLocationName] = useState('');
   const [markerPosition, setMarkerPosition] = useState(null);
 
   const mapRef = useRef();
 
-  // Function to fetch latitude and longitude for a given location
+
   const fetchCoordinates = async (location) => {
-    const apiKey = 'df821a69ea674f9cb5f4988e9ef5d3a6 '; // Replace with your OpenCage API key
+    const apiKey = 'df821a69ea674f9cb5f4988e9ef5d3a6 '; 
     const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
       location
-    )}&key=${apiKey}`;
+    )}&key=${apiKey}`
 
     try {
       const response = await fetch(url);
       const data = await response.json();
       if (data && data.results && data.results.length > 0) {
         const { lat, lng } = data.results[0].geometry;
-        setPosition([lat, lng]); // Update the map position
-        setMarkerPosition([lat, lng]); // Place the marker at the new position
-        setLocationName(data.results[0].formatted); // Update the popup text
-        moveToLocation(lat, lng); // Move the map to the new location
+        setPosition([lat, lng]); 
+        setMarkerPosition([lat, lng]); 
+        setLocationName(data.results[0].formatted); 
+        moveToLocation(lat, lng); 
       } else {
         alert('Location not found. Please try again.');
       }
@@ -34,18 +34,17 @@ const App = () => {
     }
   };
 
-  // Function to move the map to a given latitude and longitude
   const moveToLocation = (lat, lng) => {
     const map = mapRef.current;
     if (map) {
-      map.flyTo([lat, lng], 13); // Fly to the location with zoom level 13
+      map.flyTo([lat, lng], 13);
     }
   };
 
-  // Custom component to expose map instance
+
   const MapHandler = () => {
     const map = useMap();
-    mapRef.current = map; // Store the map instance in the ref
+    mapRef.current = map; 
     return null;
   };
 
@@ -57,7 +56,7 @@ const App = () => {
           placeholder="Enter a location"
           style={{ width: '300px', padding: '5px', marginRight: '10px' }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') fetchCoordinates(e.target.value); // Search on pressing Enter
+            if (e.key === 'Enter') fetchCoordinates(e.target.value); 
           }}
         />
         <button
@@ -79,7 +78,7 @@ const App = () => {
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <MapHandler /> {/* Custom handler to expose map instance */}
+        <MapHandler /> 
         {markerPosition && (
           <Marker position={markerPosition} icon={new L.Icon.Default()}>
             <Popup>{locationName || 'Unknown location'}</Popup>
